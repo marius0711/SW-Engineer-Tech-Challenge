@@ -1,0 +1,9 @@
+@startuml
+component PACS
+component Client
+component Server
+database DB
+PACS --> Client : sendet DICOM
+Client --> Server : sendet JSON
+Server --> DB : speichert Daten
+@enduml

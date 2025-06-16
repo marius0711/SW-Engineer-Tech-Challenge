@@ -1,0 +1,13 @@
+pydicom
+pynetdicom
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+pytest
+pytest-asyncio
+plantuml
+httpx
+
+
+

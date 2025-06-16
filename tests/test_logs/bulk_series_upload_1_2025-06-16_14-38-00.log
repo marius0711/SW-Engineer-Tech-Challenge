@@ -1,0 +1,7 @@
+=== Bulk Series Upload Test Summary ===
+Directory tested: /Users/marize/Downloads/floy_challenge/data/dcm/1
+Timestamp: 2025-06-16_14-38-00
+Total DICOM files scanned: 17
+✅ Successfully inserted series: 0
+⚠️ Skipped duplicates: 17
+✅ Database verification: PASSED

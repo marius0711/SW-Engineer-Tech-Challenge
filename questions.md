@@ -14,6 +14,10 @@ I chose a **RESTful API** over alternatives like **gRPC**, using **HTTP** as the
 Although **gRPC** provides advantages in terms of performance and strict schema enforcement, I considered it unnecessarily complex for this specific use case, which focuses on efficient and flexible metadata exchange.
 
 
+---
+---
+
+
 **2.  As the client and server communicate over the internet in the real world, what measures would you take to secure the data transmission and how would you implement them?**
 
 To securely transmit medical metadata in a production environment, I would implement the following measures:

@@ -174,6 +174,10 @@ Runtime logging during live operation (not just test logging)
 Centralizing constants in a config.py (e.g., ports, timeouts, paths)
 → Constants are defined inline to preserve simplicity during development; modularization is acknowledged as a future improvement.
 
+## Challenge Questions
+
+Answers to the architectural and security questions can be found in [questions.md](./questions.md).
+
 ## Submission Summary (Author’s Note)
 
 This repository represents my solution to the Floy Software Challenge. It simulates a realistic PACS integration using an asynchronous client-server architecture built in Python. The system receives DICOM files via SCP, extracts relevant metadata, and sends it to a REST API for structured storage.

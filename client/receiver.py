@@ -63,7 +63,7 @@ class SeriesDispatcher:
         self.loop: asyncio.AbstractEventLoop
         self.modality_scp = ModalityStoreSCP()
         self.series_collector = None
-        self.client = httpx.AsyncClient()  # NEU: Client nur einmal anlegen
+        self.client = httpx.AsyncClient()  # NEW: Async HTTP client for sending data to the server
 
 
     async def main(self) -> None:
@@ -84,7 +84,7 @@ class SeriesDispatcher:
         except KeyboardInterrupt:
             print("Shutting down...")
         finally:
-            await self.client.aclose()  # Client ordentlich schließen
+            await self.client.aclose()  # NEW: Close the async HTTP client
 
     async def run_series_collectors(self) -> None:
         """Handles incoming datasets from the SCP."""

@@ -63,21 +63,28 @@ class SeriesDispatcher:
         self.loop: asyncio.AbstractEventLoop
         self.modality_scp = ModalityStoreSCP()
         self.series_collector = None
+        self.client = httpx.AsyncClient()  # NEU: Client nur einmal anlegen
+
 
     async def main(self) -> None:
         """An infinitely running method used as hook for the asyncio event loop.
         Keeps the event loop alive whether or not datasets are received from the modality and prints a message
         regulary when no datasets are received.
         """
-        while True:
-            # TODO: Regulary check if new datasets are received and act if they are.
-            # Information about Python asyncio: https://docs.python.org/3/library/asyncio.html
-            # When datasets are received you should collect and process them
-            # (e.g. using `asyncio.create_task(self.run_series_collector()`)
-            await self.run_series_collectors()          # change: Process incoming datasets
-            await self.dispatch_series_collector()      # change: Try to send collected series
-            print("Waiting for Modality")
-            await asyncio.sleep(0.2)
+        try:
+            while True:
+                # TODO: Regulary check if new datasets are received and act if they are.
+                # Information about Python asyncio: https://docs.python.org/3/library/asyncio.html
+                # When datasets are received you should collect and process them
+                # (e.g. using `asyncio.create_task(self.run_series_collector()`)
+                await self.run_series_collectors()
+                await self.dispatch_series_collector()
+                print("Waiting for Modality")
+                await asyncio.sleep(0.2)
+        except KeyboardInterrupt:
+            print("Shutting down...")
+        finally:
+            await self.client.aclose()  # Client ordentlich schließen
 
     async def run_series_collectors(self) -> None:
         """Handles incoming datasets from the SCP."""
@@ -123,12 +130,12 @@ class SeriesDispatcher:
         }
 
         # change: Send metadata to server using async HTTP POST
-        async with httpx.AsyncClient() as client:
-            try:
-                response = await client.post("http://localhost:8000/upload-series", json=metadata)
-                print(f"✅ Sent metadata: {response.status_code}")
-            except Exception as e:
-                print(f"❌ Failed to send metadata: {e}")
+        
+        try:
+            response = await self.client.post("http://localhost:8000/upload-series", json=metadata)
+            print(f"✅ Sent metadata: {response.status_code}")
+        except Exception as e:
+            print(f"❌ Failed to send metadata: {e}")
 
 
 if __name__ == "__main__":

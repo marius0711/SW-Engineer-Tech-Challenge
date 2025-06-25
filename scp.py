@@ -3,7 +3,7 @@
 from pydicom.dataset import FileMetaDataset
 from pynetdicom import AE, events, evt, debug_logger
 from pynetdicom.sop_class import MRImageStorage
-from threading import Lock  # change: Added for thread safety
+from queue import Queue  # threadsave Queue instead Lock
 
 debug_logger()  # Enables detailed DICOM networking logs
 
@@ -17,8 +17,7 @@ class ModalityStoreSCP():
     def __init__(self) -> None:
         self.ae = AE(ae_title=b'STORESCP')
         self.scp = None
-        self._dataset_queue = []     # change: Queue; stores for received datasets
-        self._lock = Lock()          # change: Thread-security lock for the dataset queue
+        self._dataset_queue = Queue() # change: Thread-safe queue for the dataset queue
         self._configure_ae()
 
     def _configure_ae(self) -> None:
@@ -45,8 +44,7 @@ class ModalityStoreSCP():
         # TODO: Do something with the dataset. Think about how you can transfer the dataset from this place 
         # to the main thread or another thread for further processing.
 
-        with self._lock:
-            self._dataset_queue.append(dataset)
+        self._dataset_queue.put(dataset)
 
         return 0x0000  # change: Status code for success
 
@@ -57,8 +55,7 @@ class ModalityStoreSCP():
             Dataset: The next dataset in the queue or None if the queue is empty.
         """
         
-        with self._lock:
-            if self._dataset_queue:
-                return self._dataset_queue.pop(0)
-            return None
-            
+    def get_next_dataset(self):
+        if not self._dataset_queue.empty():
+           return self._dataset_queue.get()
+        return None

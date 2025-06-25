@@ -21,3 +21,4 @@ logs/
 
 # DICOM-Testdaten
 tests/data/*.dcm
+.env

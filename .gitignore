@@ -1,1 +1,23 @@
+# Ignnored files for Tech Challenge
+
+# Virtuelle Umgebungen
+venv/
+env/
+
+# Python Cache
 __pycache__/
+*.py[cod]
+
+# Logs
+logs/
+*.log
+
+# SQLite-Datenbankdateien
+*.sqlite3
+*.db
+
+# VS Code Einstellungen
+.vscode/
+
+# DICOM-Testdaten
+tests/data/*.dcm
